@@ -1,0 +1,1 @@
+package com.techsolution.gestion_app.domain.entities;
