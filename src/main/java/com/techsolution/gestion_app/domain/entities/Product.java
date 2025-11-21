@@ -4,27 +4,31 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 @Entity
 @Table(name = "products")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String description;
-    private Double price;
+    private String producto;
+    private String descripción;
+    private Double precio;
     private Integer stock;
-    private String category;
+    private String categoria;
 
  public Product() {
         //Dejamos este constructor vacío para JPA 
     }
-public Product(String name, String description, Double price, Integer stock, String category) {
-        this.name = name;
-        this.description = description;
-        this.price = price;
+public Product(String producto, String descripción, Double precio, Integer stock, String categoria) {
+        this.producto = producto;
+        this.descripción = descripción;
+        this.precio = precio;
         this.stock = stock;
-        this.category = category;
+        this.categoria = categoria;
     }
 //gatter : devuelven el valor
 //setters : modifica el valor
@@ -32,35 +36,42 @@ public Product(String name, String description, Double price, Integer stock, Str
 public Long getId() {
         return id;
     }
-    public String getName() {
-        return name;
+    @NotBlank
+    public String getProducto() {
+        return producto;
     }
-    public void setName(String name) {
-        this.name = name;
+    public void setProducto(String producto) {
+        this.producto = producto;
     }
-    public String getDescription() {
-        return description;
+    @NotBlank
+    public String getDescripción() {
+        return descripción;
     }
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescripción(String descripción) {
+        this.descripción = descripción;
     }
-    public Double getPrice() {
-        return price;
+    @NotNull
+    @Min(1)
+    public Double getPrecio() {
+        return precio;
     }
-    public void setPrice(Double price) {
-        this.price = price;
+    public void setPrecio(Double precio) {
+        this.precio = precio;
     }
+    @NotNull
+    @Min(0)
     public Integer getStock() {
         return stock;
     }
     public void setStock(Integer stock) {
         this.stock = stock;
     }
-    public String getCategory() {
-        return category;
+    @NotBlank
+    public String getCategoria() {
+        return categoria;
     }
-    public void setCategory(String category) {
-        this.category = category;
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
     
 }

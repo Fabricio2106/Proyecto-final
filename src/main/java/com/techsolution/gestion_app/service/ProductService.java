@@ -25,7 +25,7 @@ public class ProductService {
     public Product saveProduct(Product product) {
         return productRepository.save(product);
     }
-//
+//esto va a eliminar un producto por id
     public void deleteProduct(Long id) {
         productRepository.deleteById(id);
     }
@@ -36,11 +36,11 @@ public class ProductService {
             return null;
         }
         Product product= original.get();
-        product.setName(data.getName());
-        product.setDescription(data.getDescription());
-        product.setPrice(data.getPrice());
+        product.setProducto(data.getProducto());
+        product.setDescripción(data.getDescripción());
+        product.setPrecio(data.getPrecio());
         product.setStock(data.getStock());
-        product.setCategory(data.getCategory());
+        product.setCategoria(data.getCategoria());
         return productRepository.save(product);
     }
 }
