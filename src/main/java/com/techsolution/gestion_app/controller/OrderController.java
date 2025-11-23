@@ -6,9 +6,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.techsolution.gestion_app.domain.entities.Order;
 import com.techsolution.gestion_app.domain.enums.OrderStatus;
 import com.techsolution.gestion_app.service.OrderService;
+
 import lombok.RequiredArgsConstructor;
 //desde aquí controlamos todo lo que tenga que ver con los pedidos básicamente este archivo recibe las peticiones del cliente y se las pasa al servicio.
 @RestController
@@ -28,6 +30,6 @@ public class OrderController {
             @PathVariable Long orderId,
             @RequestParam OrderStatus status
     ) {
-        return orderService.changeStatus(orderId, status);
+        return orderService.updateOrderStatus(orderId, status);
     }
 }

@@ -2,6 +2,7 @@ package com.techsolution.gestion_app.domain.entities;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.techsolution.gestion_app.domain.enums.OrderStatus;
 
 import jakarta.persistence.CascadeType;
@@ -20,7 +21,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 @Entity
 @Table(name = "orders")
 @Getter
@@ -42,8 +42,12 @@ public class Order {
     private Customer customer;
     // Relación uno a uno con el pago
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "order-payment")
     private Payment payment;
     // Una orden puede tener varios items
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<OrderItem> orderItems;
+    // control de stock
+    private boolean stockDescontado= false;
 }

@@ -1,4 +1,6 @@
 package com.techsolution.gestion_app.domain.entities;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,5 +27,6 @@ public class Payment {
     // va a relacionar con la orden a la que pertenece este pago
     @OneToOne
     @JoinColumn(name = "order_id")
+    @JsonBackReference(value = "order-payment")
     private Order order;
 }

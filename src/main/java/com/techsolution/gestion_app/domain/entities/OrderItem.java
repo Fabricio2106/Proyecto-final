@@ -1,5 +1,7 @@
 package com.techsolution.gestion_app.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,9 +25,12 @@ public class OrderItem {
     private Long id;
     // unidades del producto que se están comprando
     private Integer quantity;
+    //precio unitario del producto en la orden
+    private Double unitPrice;
     // cada item pertenece a una sola orden (relación muchos a uno)
     @ManyToOne
     @JoinColumn(name = "order_id")
+    @JsonBackReference
     private Order order;
     //referencia al producto que se está añadiendo a la orden
     @ManyToOne

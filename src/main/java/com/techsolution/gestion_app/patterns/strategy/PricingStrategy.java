@@ -1,4 +1,5 @@
 package com.techsolution.gestion_app.patterns.strategy;
-public class PricingStrategy {
-    
+import com.techsolution.gestion_app.domain.entities.Product;
+public interface PricingStrategy {
+    double calculatePrice(Product product);
 }
