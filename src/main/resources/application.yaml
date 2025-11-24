@@ -17,3 +17,11 @@ spring:
     console:
       enabled: true
       path: /h2-console
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+  controller-advice:
+    enabled: false  

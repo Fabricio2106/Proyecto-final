@@ -1,4 +1,5 @@
 package com.techsolution.gestion_app.controller;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -12,24 +13,39 @@ import com.techsolution.gestion_app.domain.enums.OrderStatus;
 import com.techsolution.gestion_app.service.OrderService;
 
 import lombok.RequiredArgsConstructor;
-//desde aquí controlamos todo lo que tenga que ver con los pedidos básicamente este archivo recibe las peticiones del cliente y se las pasa al servicio.
+// Controlador para manejar todo lo relacionado a pedidos.
+// Aquí recibimos los datos y se los pasamos al servicio.
 @RestController
 @RequestMapping("/orders")
 @RequiredArgsConstructor
 public class OrderController {
-    // Aquí usamos el servicio donde está la lógica de los pedidos.
+    // Servicio donde está la lógica principal de pedidos.
     private final OrderService orderService;
-    // aca se va a crear un pedido nuevo el pedido llega desde el cuerpo de la petición (JSON)y lo enviamos al servicio para guardarlo.
+    // Crea un pedido nuevo. El JSON se convierte en un objeto Order automáticamente.
     @PostMapping
     public Order createOrder(@RequestBody Order order) {
+        // Aquí simplemente delegamos al servicio.
         return orderService.createOrder(order);
     }
-    // Cambiar el estado de un pedido
+    // Cambia el estado de un pedido usando su ID y el nuevo estado.
     @PutMapping("/{orderId}/estado")
     public Order updateStatus(
             @PathVariable Long orderId,
             @RequestParam OrderStatus status
     ) {
+        // Solo llamamos al servicio para actualizarlo.
         return orderService.updateOrderStatus(orderId, status);
+    }
+    // Endpoint de prueba para lanzar una excepción de "orden no encontrada".
+    @PostMapping("/test/not-found")
+    public void testOrderNotFound() {
+        throw new com.techsolution.gestion_app.common.exception.OrderNotFoundException(
+                "Orden de prueba no encontrada"
+        );
+    }
+    // Endpoint de prueba para lanzar un error genérico.
+    @PostMapping("/test/generic-error")
+    public void testGenericError() {
+        throw new RuntimeException("Error inesperado de prueba en pedido");
     }
 }
