@@ -10,7 +10,6 @@ public class DynamicPrice implements PricingStrategy {
         if (stock > 50) {
             return product.getPrecio() * 0.95; // Reduce el precio en un 5% si el stock es alto
         }
-        
         return product.getPrecio();
     }
 }

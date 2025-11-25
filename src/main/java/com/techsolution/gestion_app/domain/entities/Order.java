@@ -33,18 +33,18 @@ public class Order {
     private Long id;
     private LocalDateTime orderDate;
     private Double totalAmount;
-    // Estado actual del pedido
+    // estado actual del pedido
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
-    // Muchos pedidos pueden pertenecer al mismo cliente
+    // muchos pedidos pueden pertenecer al mismo cliente
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
-    // Relación uno a uno con el pago
+    // relación uno a uno con el pago
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     @JsonManagedReference(value = "order-payment")
     private Payment payment;
-    // Una orden puede tener varios items
+    // una orden puede tener varios items
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<OrderItem> orderItems;

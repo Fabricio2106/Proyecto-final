@@ -21,12 +21,12 @@ public class PaymentController {
     private final PayPalAdapter payPalAdapter;
     private final YapeAdapter yapeAdapter;
     private final PlinAdapter plinAdapter;
-    // Procesar un pago según el método enviado
+    // procesar un pago según el método enviado
     @PostMapping("/order/{orderId}")
     public String processPayment(@PathVariable Long orderId, @RequestBody PaymentRequest paymentRequest) {
         double monto = paymentRequest.getMonto();
         String metodo = paymentRequest.getMetodo().toLowerCase();
-        // Elegimos el adaptador usando rule switch
+        // elegimos el adaptador usando rule switch
         var gateway = switch (metodo) {
             case "paypal" -> payPalAdapter;
             case "yape" -> yapeAdapter;
@@ -36,17 +36,17 @@ public class PaymentController {
         if (gateway == null) {
             return "Método no válido. Usa: paypal, yape o plin.";
         }
-        // Configuramos la pasarela en el servicio y procesamos el pago
+        // configuramos la pasarela en el servicio y procesamos el pago
         paymentService.setGateway(gateway);
         boolean ok = paymentService.processPayment(monto);
         return ok ? "Pago realizado con éxito usando " + metodo : "No se pudo procesar el pago.";
     }
-    // Endpoint para probar errores manualmente
+    // endpoint para probar errores manualmente
     @PostMapping("/test/error")
     public void testPaymentError() {
         throw new RuntimeException("Error inesperado en prueba de pago");
     }
-    // Control de pasarelas (simulado)
+    // control de pasarelas (simulado)
     @PostMapping("/config/{gateway}/enable")
     public String enableGateway(@PathVariable String gateway) {
         return toggleGatewayMessage(gateway, true);
@@ -55,7 +55,7 @@ public class PaymentController {
     public String disableGateway(@PathVariable String gateway) {
         return toggleGatewayMessage(gateway, false);
     }
-    // Solo devuelve un mensaje de estado. La lógica real de habilitar/deshabilitar
+    // solo devuelve un mensaje de estado. La lógica real de habilitar/deshabilitar
     // debería ir en PaymentConfig y no en los adaptadores
     private String toggleGatewayMessage(String gateway, boolean enabled) {
         gateway = gateway.toLowerCase();

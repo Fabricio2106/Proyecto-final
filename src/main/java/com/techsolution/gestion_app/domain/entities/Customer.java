@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-//Representa a un cliente dentro del sistema aquí solo guardamos lo básico: su nombre y su email.más adelante se le pueden agregar direcciones, teléfono,historial de pedidos, etc.
+//representa a un cliente dentro del sistema aquí solo guardamos lo básico: su nombre y su email.más adelante se le pueden agregar direcciones, teléfono,historial de pedidos, etc.
 @Entity
 @Table(name = "customers")
 @Getter
@@ -18,7 +18,7 @@ import lombok.Setter;
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Identificador del cliente (lo genera automáticamente la BD)
-    private String nombre;  // Nombre completo del cliente
-    private String correo; // Correo electrónico del cliente
+    private Long id; // identifica el cliente y genera automáticamente la BD
+    private String nombre;  // nombre completo del cliente
+    private String correo; // correo electrónico del cliente
 }

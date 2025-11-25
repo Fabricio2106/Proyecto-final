@@ -1,7 +1,7 @@
 package com.techsolution.gestion_app.patterns.adapter;
 
 import org.springframework.stereotype.Component;
-// Adaptador para pagos con Yape
+// adaptador para pagos con Yape
 @Component
 public class YapeAdapter implements PaymentGateway {
     private boolean enabled = true;

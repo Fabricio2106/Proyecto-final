@@ -9,7 +9,7 @@ import com.techsolution.gestion_app.repository.ProductRepository;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-//Constructor spring se encarga de inyectar la dependencia
+//constructor spring se encarga de inyectar la dependencia
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }

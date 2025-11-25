@@ -2,13 +2,13 @@ package com.techsolution.gestion_app.domain.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-// Configuración de pasarelas de pago en el sistema
+// configuración de pasarelas de pago en el sistema
 @Entity
 public class PaymentConfig {
     @Id
     private final Long id = 1L; 
-    // Solo habrá un registro global, por eso el ID es fijo y final
-    // Estado de cada pasarela
+    // solo habrá un registro global, por eso el ID es fijo y final
+    // estado de cada pasarela
     private boolean paypalActivo = true;
     private boolean yapeActivo = true;
     private boolean plinActivo = true;

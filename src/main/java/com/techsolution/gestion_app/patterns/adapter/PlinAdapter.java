@@ -1,7 +1,7 @@
 package com.techsolution.gestion_app.patterns.adapter;
 
 import org.springframework.stereotype.Component;
-// Adaptador para pagos con Plin
+// adaptador para pagos con Plin
 @Component
 public class PlinAdapter implements PaymentGateway {
     private boolean enabled = true;

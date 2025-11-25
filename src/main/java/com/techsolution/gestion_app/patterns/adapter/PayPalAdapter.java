@@ -2,11 +2,11 @@ package com.techsolution.gestion_app.patterns.adapter;
 
 import org.springframework.stereotype.Component;
 
-// Adaptador para pagos con PayPal
+// adaptador para pagos con PayPal
 @Component
 public class PayPalAdapter implements PaymentGateway {
 
-    // Indica si este método de pago está habilitado
+    // indica si este método de pago está habilitado
     private boolean enabled = true;
 
     @Override
@@ -20,12 +20,12 @@ public class PayPalAdapter implements PaymentGateway {
         return true;
     }
 
-    // Activar o desactivar la pasarela
+    // activa o desactivar la pasarela
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
-    // Saber si está activa
+    // saber si está activa
     public boolean isEnabled() {
         return enabled;
     }
