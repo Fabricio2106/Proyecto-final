@@ -12,30 +12,36 @@ import com.techsolution.gestion_app.domain.entities.Order;
 import com.techsolution.gestion_app.domain.enums.OrderStatus;
 import com.techsolution.gestion_app.service.OrderService;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+
 // Controlador para manejar todo lo relacionado a pedidos.
 // Aquí recibimos los datos y se los pasamos al servicio.
 @RestController
 @RequestMapping("/orders")
 @RequiredArgsConstructor
 public class OrderController {
+
     // servicio donde está la lógica principal de pedidos.
     private final OrderService orderService;
+
     // crea un pedido nuevo. El JSON se convierte en un objeto Order automáticamente.
     @PostMapping
-    public Order createOrder(@RequestBody Order order) {
+    public Order createOrder(@RequestBody @NonNull Order order) {
         // aquí simplemente delegamos al servicio.
         return orderService.createOrder(order);
     }
+
     // cambia el estado de un pedido usando su ID y el nuevo estado.
     @PutMapping("/{orderId}/estado")
     public Order updateStatus(
-            @PathVariable Long orderId,
-            @RequestParam OrderStatus status
+            @PathVariable @NonNull Long orderId,
+            @RequestParam @NonNull OrderStatus status
     ) {
         // solo llamamos al servicio para actualizarlo.
         return orderService.updateOrderStatus(orderId, status);
     }
+
     // endpoint de prueba para lanzar una excepción de "orden no encontrada".
     @PostMapping("/test/not-found")
     public void testOrderNotFound() {
@@ -43,6 +49,7 @@ public class OrderController {
                 "Orden de prueba no encontrada"
         );
     }
+
     // endpoint de prueba para lanzar un error genérico.
     @PostMapping("/test/generic-error")
     public void testGenericError() {
