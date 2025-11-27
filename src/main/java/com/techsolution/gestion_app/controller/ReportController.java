@@ -4,8 +4,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.techsolution.gestion_app.patterns.proxy.ReportProxy;
-import com.techsolution.gestion_app.patterns.proxy.dto.FinancialReport;
+import com.techsolution.gestion_app.features.reporting.proxy.ReportProxy;
+import com.techsolution.gestion_app.features.reporting.dto.FinancialReport;
 
 //endpoints relacionados a reportes financieros.
 

@@ -7,8 +7,11 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+//configuracion de openAPI para la documentación de la API
+//incluye los datos básicos y el esquema de autenticación.
 @Configuration
 public class OpenAPIConfig {
+        //configura la documentación de OpenAPI y registra el esquema Basic Auth.
     @Bean
     public OpenAPI customOpenAPI() {
         // registrar esquema basic auth para Swagger UI

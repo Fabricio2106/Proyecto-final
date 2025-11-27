@@ -8,10 +8,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+//configuración principal de seguridad.
+//define accesos por rol y usuarios en memoria para pruebas.
 @Configuration
 public class SecurityConfig {
 
-    // Configuramos qué rutas requieren login y quién puede entrar
+    // configuramos qué rutas requieren login y quién puede entrar
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -27,7 +29,8 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // Creamos usuarios de prueba en memoria
+    // Creamos usuarios de prueba en memoria 
+    //incluye gerente,contador y clietne
     @Bean
     public UserDetailsService users() {
         var userManager = new InMemoryUserDetailsManager();

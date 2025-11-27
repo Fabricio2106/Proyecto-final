@@ -13,8 +13,8 @@ import com.techsolution.gestion_app.domain.entities.Order;
 import com.techsolution.gestion_app.domain.entities.OrderItem;
 import com.techsolution.gestion_app.domain.entities.Product;
 import com.techsolution.gestion_app.domain.enums.OrderStatus;
-import com.techsolution.gestion_app.patterns.strategy.PricingContext;
-import com.techsolution.gestion_app.patterns.strategy.StandardPrice;
+import com.techsolution.gestion_app.features.order.strategy.PricingContext;
+import com.techsolution.gestion_app.features.order.strategy.StandardPrice;
 import com.techsolution.gestion_app.repository.OrderRepository;
 
 import jakarta.transaction.Transactional;

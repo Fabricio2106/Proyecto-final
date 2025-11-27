@@ -6,9 +6,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.techsolution.gestion_app.domain.entities.Product;
-import com.techsolution.gestion_app.patterns.observer.InventoryObserver;
-import com.techsolution.gestion_app.patterns.observer.ManagerObserver;
-import com.techsolution.gestion_app.patterns.observer.PurchaseObserver;
+import com.techsolution.gestion_app.features.product.observer.InventoryObserver;
+import com.techsolution.gestion_app.features.product.observer.ManagerObserver;
+import com.techsolution.gestion_app.features.product.observer.PurchaseObserver;
 
 // servicio para controlar el stock y avisar a GERENTE y COMPRAS cuando baja
 @Service

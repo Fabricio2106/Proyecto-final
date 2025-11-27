@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.techsolution.gestion_app.controller.dto.PaymentRequest;
-import com.techsolution.gestion_app.patterns.adapter.PayPalAdapter;
-import com.techsolution.gestion_app.patterns.adapter.PaymentService;
-import com.techsolution.gestion_app.patterns.adapter.PlinAdapter;
-import com.techsolution.gestion_app.patterns.adapter.YapeAdapter;
+import com.techsolution.gestion_app.features.payment.adapter.PayPalAdapter;
+import com.techsolution.gestion_app.features.payment.adapter.PaymentService;
+import com.techsolution.gestion_app.features.payment.adapter.PlinAdapter;
+import com.techsolution.gestion_app.features.payment.adapter.YapeAdapter;
 
 import lombok.RequiredArgsConstructor;
 @RestController
