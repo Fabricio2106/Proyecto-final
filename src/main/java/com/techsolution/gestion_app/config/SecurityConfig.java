@@ -2,6 +2,7 @@ package com.techsolution.gestion_app.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,7 +25,7 @@ public class SecurityConfig {
                 .requestMatchers("/reports/**").hasAnyRole("GERENTE","CONTADOR") // solo GERENTE y CONTADOR pueden ver reportes
                 .anyRequest().authenticated() // lo demás necesita login
             )
-            .httpBasic();
+            .httpBasic(Customizer.withDefaults()); // ← FIX sin cambiar nada
 
         return http.build();
     }
