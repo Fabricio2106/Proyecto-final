@@ -7,10 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-/**
- * Maneja todas las excepciones de la aplicación de forma centralizada.
- * Permite que los controladores no tengan que repetir código de manejo de errores.
- */
+//Maneja todas las excepciones de la aplicación de forma centralizada.Permite que los controladores no tengan que repetir código de manejo de errores.
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -36,9 +33,8 @@ public class GlobalExceptionHandler {
                              .body("Orden no encontrada: " + ex.getMessage());
     }
 
-    /**
-     * Se invoca cuando no hay suficiente stock para completar la operación.
-     */
+    //Se invoca cuando no hay suficiente stock para completar la operación.
+    
     @ExceptionHandler(InsufficientStockException.class)
     public ResponseEntity<String> onInsufficientStock(InsufficientStockException ex) {
         logger.warn("Stock insuficiente: {}", ex.getMessage());
@@ -46,9 +42,8 @@ public class GlobalExceptionHandler {
                              .body("Stock insuficiente: " + ex.getMessage());
     }
 
-    /**
-     * Captura cualquier excepción no prevista.
-     */
+     // Captura cualquier excepción no prevista.
+   
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> onGenericException(Exception ex) {
         logger.error("Error inesperado en la aplicación", ex);

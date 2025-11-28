@@ -42,6 +42,38 @@ public class OrderController {
         return orderService.updateOrderStatus(orderId, status);
     }
 
+    // procesa un pedido
+    @PutMapping("/{orderId}/procesar")
+    public Order processOrder(@PathVariable @NonNull Long orderId) {
+        // delega al servicio para cambiar a estado PROCESANDO
+        return orderService.processOrder(orderId);
+    }
+
+    // cancela un pedido
+    @PutMapping("/{orderId}/cancelar")
+    public Order cancelOrder(@PathVariable @NonNull Long orderId) {
+        // delega al servicio para cancelar el pedido
+        return orderService.cancelOrder(orderId);
+    }
+
+    // aplica un descuento a un pedido
+    @PutMapping("/{orderId}/descuento")
+    public Order applyDiscount(
+            @PathVariable @NonNull Long orderId,
+            @RequestParam double porcentaje
+    ) {
+        // delega al servicio para aplicar el descuento
+        orderService.applyDiscount(orderId, porcentaje);
+        return orderService.getOrderById(orderId).orElseThrow();
+    }
+
+    // restaura el último estado de la orden (Memento)
+    @PostMapping("/{orderId}/restaurar")
+    public void restoreOrderState(@PathVariable @NonNull Long orderId) {
+        orderService.getOrderById(orderId)
+                .ifPresent(orderService::restoreLastState);
+    }
+
     // endpoint de prueba para lanzar una excepción de "orden no encontrada".
     @PostMapping("/test/not-found")
     public void testOrderNotFound() {

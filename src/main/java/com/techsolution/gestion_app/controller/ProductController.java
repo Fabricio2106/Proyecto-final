@@ -56,35 +56,42 @@ public class ProductController {
     // actualizar un producto
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Product data) {
+        // lanzamos excepción si el producto no existe
         Product updated = productService.updateProduct(id, data);
         if (updated == null) {
-            return ResponseEntity.notFound().build();
+            throw new ProductNotFoundException("Producto no encontrado con ID " + id);
         }
         return ResponseEntity.ok(updated);
     }
 
     // eliminar un producto
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        productService.deleteProduct(id);
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        Product product = productService.getProductById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Producto no encontrado con ID " + id));
+        
+        productService.deleteProduct(id); // aquí sigue siendo void
+        return ResponseEntity.ok("Producto eliminado correctamente");
     }
 
-    // actualiza el stock y muestras las alertas
+    // actualiza el stock y muestra las alertas
     @PutMapping("/{id}/stock")
     public ResponseEntity<String> updateStock(@PathVariable Long id, @RequestParam int stock) {
-        Product product = productService.getProductById(id).orElse(null);
-        if (product == null) {
-            return ResponseEntity.notFound().build();
+        Product product = productService.getProductById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Producto no encontrado con ID " + id));
+
+        // validamos que el stock no sea negativo
+        if (stock < 0) {
+            throw new InsufficientStockException("El stock no puede ser negativo");
         }
 
         // actualizamos el stock y avisamos a GERENTE y COMPRAS si es necesario
         stockObserverService.updateStock(product, stock);
 
-        return ResponseEntity.ok("Stock actualizado y alertas enviadas si corresponde");
+        return ResponseEntity.ok("Stock actualizado a " + product.getStock() + " y alertas enviadas si corresponde");
     }
 
-//aca estoy implemetando endpoints de prueba , solo va a simular pruebas para ver el manejo de errores 
-
+    // endpoints de prueba para manejar errores
     @GetMapping("/test/product-not-found")
     public void testProductNotFound() {
         throw new ProductNotFoundException("Producto de prueba no encontrado");

@@ -1,5 +1,7 @@
 package com.techsolution.gestion_app.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,6 +20,7 @@ public class Product {
     private Long id;  // ID único del producto
 
     private String producto;  // nombre del producto
+     @JsonProperty
     private String descripción; // descripción del producto
     private Double precio;      // precio del producto
     private Integer stock;      // stock actual
