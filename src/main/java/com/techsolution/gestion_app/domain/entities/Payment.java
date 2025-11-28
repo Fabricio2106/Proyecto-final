@@ -1,5 +1,7 @@
 package com.techsolution.gestion_app.domain.entities;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.techsolution.gestion_app.domain.enums.PaymentStatus;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 @Entity
 @Table(name = "payments")
 @Getter
@@ -19,12 +22,18 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Payment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    // esto va a mosntar el monto total que se pagó por la orden
+
+    // monto total que se pagó por la orden
     private Double amount;
-    // va a relacionar con la orden a la que pertenece este pago
+
+    // estado del pago
+    private PaymentStatus status;
+
+    // relación con la orden a la que pertenece este pago
     @OneToOne
     @JoinColumn(name = "order_id")
     @JsonBackReference(value = "order-payment")

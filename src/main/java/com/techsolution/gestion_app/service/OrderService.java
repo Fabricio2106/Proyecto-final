@@ -3,7 +3,7 @@ package com.techsolution.gestion_app.service;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import org.springframework.lang.NonNull;   //  evita warnings
+import org.springframework.lang.NonNull;   
 import org.springframework.stereotype.Service;
 
 import com.techsolution.gestion_app.common.exception.InsufficientStockException;
@@ -12,13 +12,16 @@ import com.techsolution.gestion_app.common.exception.ProductNotFoundException;
 import com.techsolution.gestion_app.domain.entities.Customer;
 import com.techsolution.gestion_app.domain.entities.Order;
 import com.techsolution.gestion_app.domain.entities.OrderItem;
+import com.techsolution.gestion_app.domain.entities.Payment;
 import com.techsolution.gestion_app.domain.entities.Product;
 import com.techsolution.gestion_app.domain.enums.OrderStatus;
+import com.techsolution.gestion_app.domain.enums.PaymentStatus;
 import com.techsolution.gestion_app.features.order.memento.Caretaker;
 import com.techsolution.gestion_app.features.order.memento.OrderMemento;
 import com.techsolution.gestion_app.features.order.memento.OrderOriginator;
 import com.techsolution.gestion_app.features.order.strategy.PricingContext;
 import com.techsolution.gestion_app.features.order.strategy.StandardPrice;
+import com.techsolution.gestion_app.features.payment.adapter.PaymentService;
 import com.techsolution.gestion_app.repository.OrderRepository;
 
 import jakarta.transaction.Transactional;
@@ -31,22 +34,22 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductService productService;
     private final CustomerService customerService;
-    private final StockObserverService stockObserverService; // ← observer para stock
+    private final StockObserverService stockObserverService; 
     private final PricingContext pricingContext;
+    private final PaymentService paymentService; // ← agregado
 
     // Memento
     private final OrderOriginator originator = new OrderOriginator();
     private final Caretaker caretaker = new Caretaker();
 
     // trae una orden por id
-    public Optional<Order> getOrderById(@NonNull Long id) {   // ← evita warning
+    public Optional<Order> getOrderById(@NonNull Long id) {   
         return orderRepository.findById(id);
     }
 
     // crear nueva orden
     @Transactional
-    public Order createOrder(@NonNull Order order) {   // ← evita warning
-
+    public Order createOrder(@NonNull Order order) {   
         // Guardar estado inicial
         originator.setOrder(order);
         caretaker.addMemento(originator.saveState());
@@ -55,8 +58,10 @@ public class OrderService {
         order.setOrderDate(LocalDateTime.now());
         Customer customer = customerService.getCustomerById(order.getCustomer().getId());
         order.setCustomer(customer);
+
         pricingContext.setStrategy(new StandardPrice());
         double total = 0.0;
+
         for (OrderItem item : order.getOrderItems()) {
             Product product = productService.getProductById(item.getProduct().getId())
                     .orElseThrow(() -> new ProductNotFoundException(
@@ -70,20 +75,32 @@ public class OrderService {
             item.setUnitPrice(priceForProduct);
             item.setProduct(product);
             item.setOrder(order);
+
             // Observer: verificar stock y notificar si baja del mínimo
             stockObserverService.checkStock(product);
         }
         order.setTotalAmount(total);
         descontarStock(order);
-        if (order.getPayment() != null) {
-            order.getPayment().setOrder(order);
-        }
+
+        // crear Payment automáticamente
+        Payment payment = new Payment();
+        payment.setAmount(total);
+        payment.setStatus(PaymentStatus.PENDIENTE);
+        payment.setOrder(order);
+        order.setPayment(payment);
+        paymentService.savePayment(payment);
 
         // Guardar estado final de la creación
         originator.setOrder(order);
         caretaker.addMemento(originator.saveState());
 
         return orderRepository.save(order);
+    }
+
+    // actualizar estado del pago
+    @Transactional
+    public void updatePaymentStatus(@NonNull Long paymentId, @NonNull PaymentStatus status) {
+        paymentService.updatePaymentStatus(paymentId, status);
     }
 
     // Restaurar último estado de la orden (Memento)
@@ -98,7 +115,7 @@ public class OrderService {
 
     // actualizar estado de la orden
     @Transactional
-    public Order updateOrderStatus(@NonNull Long orderId, @NonNull OrderStatus status) { // ← evita warning
+    public Order updateOrderStatus(@NonNull Long orderId, @NonNull OrderStatus status) { 
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new OrderNotFoundException("Pedido no encontrado: " + orderId));
         if (status == OrderStatus.ENTREGADO && !order.isStockDescontado()) {
@@ -114,7 +131,7 @@ public class OrderService {
     // descontar stock
     private void descontarStock(Order order) {
         for (OrderItem item : order.getOrderItems()) {
-              Product product = item.getProduct();
+            Product product = item.getProduct();
             if (product.getStock() < item.getQuantity()) {
                 throw new InsufficientStockException(
                         "Stock insuficiente para el producto: " + product.getProducto());
@@ -134,6 +151,7 @@ public class OrderService {
             Product product = item.getProduct();
             product.setStock(product.getStock() + item.getQuantity());
             productService.saveProduct(product);
+
             // Observer: notificar cambios de stock
             stockObserverService.checkStock(product);
         }
@@ -141,7 +159,7 @@ public class OrderService {
     }
 
     // aplicar descuento
-    public void applyDiscount(@NonNull Long orderId, double percentage) { // ← evita warning
+    public void applyDiscount(@NonNull Long orderId, double percentage) { 
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new OrderNotFoundException("Pedido no encontrado: " + orderId));
         if (percentage < 0 || percentage > 100) {
@@ -154,7 +172,7 @@ public class OrderService {
 
     // cancelar orden
     @Transactional
-    public Order cancelOrder(@NonNull Long orderId) {  // ← evita warning
+    public Order cancelOrder(@NonNull Long orderId) {  
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new OrderNotFoundException("Pedido no encontrado: " + orderId));
         if (order.isStockDescontado()) {
@@ -166,7 +184,7 @@ public class OrderService {
 
     // procesar orden
     @Transactional
-    public Order processOrder(@NonNull Long orderId) {  // ← evita warning
+    public Order processOrder(@NonNull Long orderId) {  
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new OrderNotFoundException("Pedido no encontrado: " + orderId));
         order.setStatus(OrderStatus.PROCESANDO);
