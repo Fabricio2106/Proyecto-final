@@ -20,7 +20,7 @@ public class Product {
     private Long id;  // ID único del producto
 
     private String producto;  // nombre del producto
-     @JsonProperty
+    @JsonProperty
     private String descripción; // descripción del producto
     private Double precio;      // precio del producto
     private Integer stock;      // stock actual

@@ -1,12 +1,6 @@
 package com.techsolution.gestion_app.controller;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.techsolution.gestion_app.domain.entities.Order;
 import com.techsolution.gestion_app.domain.enums.OrderStatus;
@@ -14,7 +8,7 @@ import com.techsolution.gestion_app.service.OrderService;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-
+import java.util.List;
 // Controlador para manejar todo lo relacionado a pedidos.
 // Aquí simplemente recibimos las solicitudes HTTP y las delegamos al servicio.
 @RestController
@@ -24,6 +18,16 @@ public class OrderController {
 
     // Servicio donde se encuentra la lógica principal de pedidos.
     private final OrderService orderService;
+
+    @GetMapping
+    public List<Order> getAllOrders() {
+        return orderService.getAllOrders();
+    }
+
+    @GetMapping("/{orderId}")
+    public Order getOrderById(@PathVariable @NonNull Long orderId) {
+        return orderService.getOrderById(orderId).orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
+    }
 
     // Crea un pedido nuevo. El JSON recibido se convierte automáticamente en un objeto Order.
     @PostMapping
