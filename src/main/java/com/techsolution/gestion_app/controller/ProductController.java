@@ -65,14 +65,21 @@ public class ProductController {
     }
 
     // eliminar un producto
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
+@DeleteMapping("/{id}")
+public ResponseEntity<String> delete(@PathVariable Long id) {
+    try {
         Product product = productService.getProductById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Producto no encontrado con ID " + id));
-        
+
         productService.deleteProduct(id); // aquí sigue siendo void
         return ResponseEntity.ok("Producto eliminado correctamente");
+    } catch (ProductNotFoundException ex) {
+        return ResponseEntity.status(404).body(ex.getMessage());
+    } catch (Exception ex) {
+        // captura errores inesperados y evita 500 genérico
+        return ResponseEntity.status(500).body("Error al eliminar el producto: " + ex.getMessage());
     }
+}
 
     // actualiza el stock y muestra las alertas
     @PutMapping("/{id}/stock")
