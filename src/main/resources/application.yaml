@@ -10,11 +10,12 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: update   # 'update' mantiene tus datos existentes y crea tablas nuevas si faltan
     show-sql: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true   # para que las consultas SQL se vean legibles en consola
 
 springdoc:
   api-docs:

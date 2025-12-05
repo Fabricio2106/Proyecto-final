@@ -2,8 +2,9 @@ package com.techsolution.gestion_app.service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.List; // ← agregado
 
-import org.springframework.lang.NonNull;   
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import com.techsolution.gestion_app.common.exception.InsufficientStockException;
@@ -189,5 +190,19 @@ public class OrderService {
                 .orElseThrow(() -> new OrderNotFoundException("Pedido no encontrado: " + orderId));
         order.setStatus(OrderStatus.PROCESANDO);
         return orderRepository.save(order);
+    }
+
+    // ==========================================================
+    // 🚀 AGREGADO: listar TODAS las órdenes (para admin)
+    // ==========================================================
+    public List<Order> getAllOrders() {
+        return orderRepository.findAll();
+    }
+
+    // ==========================================================
+    // 🚀 AGREGADO: listar órdenes por cliente
+    // ==========================================================
+    public List<Order> getOrdersByCustomer(Long customerId) {
+        return orderRepository.findByCustomerId(customerId);
     }
 }

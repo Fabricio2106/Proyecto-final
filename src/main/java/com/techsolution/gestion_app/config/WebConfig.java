@@ -13,7 +13,8 @@ public class WebConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/**")           // todos los endpoints de /api
+                // Aplicar CORS a todas las rutas
+                registry.addMapping("/**")  
                         .allowedOrigins("http://localhost:5173") // tu frontend
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
@@ -22,4 +23,3 @@ public class WebConfig {
         };
     }
 }
- 

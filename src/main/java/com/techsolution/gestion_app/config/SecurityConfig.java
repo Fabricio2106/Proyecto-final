@@ -16,16 +16,19 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable()) // deshabilita CSRF para pruebas
             .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll() // todo endpoint libre, sin login ni rol
-            );
-            // No se configura httpBasic() para deshabilitar autenticación
+                // proteges SOLO los reportes
+                .requestMatchers("/reports/**").authenticated()
+                // todo lo demás sigue libre como antes
+                .anyRequest().permitAll()
+            )
+            // habilitamos autenticación simple
+            .httpBasic(); 
 
         return http.build();
     }
 
     @Bean
     public UserDetailsService users() {
-        // Usuarios definidos solo para pruebas futuras si se quiere
         var userManager = new InMemoryUserDetailsManager();
 
         userManager.createUser(
@@ -46,6 +49,7 @@ public class SecurityConfig {
                 .roles("CLIENTE")
                 .build()
         );
+
         return userManager;
     }
 }

@@ -1,5 +1,8 @@
 package com.techsolution.gestion_app.controller;
 
+import java.util.List;
+
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,24 +18,40 @@ import com.techsolution.gestion_app.service.OrderService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-// Controlador para manejar todo lo relacionado a pedidos.
-// Aquí simplemente recibimos las solicitudes HTTP y las delegamos al servicio.
 @RestController
 @RequestMapping("/orders")
 @RequiredArgsConstructor
 public class OrderController {
 
-    // Servicio donde se encuentra la lógica principal de pedidos.
     private final OrderService orderService;
 
-    // Crea un pedido nuevo. El JSON recibido se convierte automáticamente en un objeto Order.
+
+    // ENDPOINTS PARA CONSULTAS (GET)
+
+
+    // Listar todos los pedidos
+    @GetMapping
+    public List<Order> getAllOrders() {
+        return orderService.getAllOrders();
+    }
+
+    // Obtener un pedido por su ID
+    @GetMapping("/{orderId}")
+    public Order getOrderById(@PathVariable @NonNull Long orderId) {
+        return orderService.getOrderById(orderId)
+                .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
+    }
+
+    // ENDPOINTS PARA CREAR Y MODIFICAR PEDIDOS
+
+
+    // Crear un nuevo pedido
     @PostMapping
     public Order createOrder(@RequestBody @NonNull Order order) {
         return orderService.createOrder(order);
     }
 
-    // ÚNICO endpoint para actualizar el estado de un pedido.
-    // Desde aquí se puede cambiar a: PENDIENTE, PROCESANDO, CANCELADO, ENVIADO, ENTREGADO, etc.
+    // Actualizar el estado de un pedido
     @PutMapping("/{orderId}/estado")
     public Order updateStatus(
             @PathVariable @NonNull Long orderId,
@@ -41,7 +60,7 @@ public class OrderController {
         return orderService.updateOrderStatus(orderId, status);
     }
 
-    // Aplica un descuento a un pedido usando el patrón Strategy + Command.
+    // Aplicar un descuento a un pedido
     @PutMapping("/{orderId}/descuento")
     public Order applyDiscount(
             @PathVariable @NonNull Long orderId,
@@ -51,14 +70,17 @@ public class OrderController {
         return orderService.getOrderById(orderId).orElseThrow();
     }
 
-    // Restaura el último estado guardado de la orden (patrón Memento).
+    // Restaurar el pedido a su último estado guardado
     @PostMapping("/{orderId}/restaurar")
     public void restoreOrderState(@PathVariable @NonNull Long orderId) {
         orderService.getOrderById(orderId)
                 .ifPresent(orderService::restoreLastState);
     }
 
-    // Endpoint de prueba para lanzar una excepción de "orden no encontrada".
+    // ENDPOINTS DE PRUEBA
+  
+
+    // Generar error de "pedido no encontrado" para pruebas
     @PostMapping("/test/not-found")
     public void testOrderNotFound() {
         throw new com.techsolution.gestion_app.common.exception.OrderNotFoundException(
@@ -66,7 +88,7 @@ public class OrderController {
         );
     }
 
-    // Endpoint de prueba para lanzar un error genérico y verificar el manejador global de excepciones.
+    // Generar error genérico para pruebas
     @PostMapping("/test/generic-error")
     public void testGenericError() {
         throw new RuntimeException("Error inesperado de prueba en pedido");
