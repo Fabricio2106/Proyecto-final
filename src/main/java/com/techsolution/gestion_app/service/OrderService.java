@@ -2,9 +2,9 @@ package com.techsolution.gestion_app.service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.List; // ← agregado
+import java.util.List;
 
-import org.springframework.lang.NonNull;
+import org.springframework.lang.NonNull;   
 import org.springframework.stereotype.Service;
 
 import com.techsolution.gestion_app.common.exception.InsufficientStockException;
@@ -191,18 +191,12 @@ public class OrderService {
         order.setStatus(OrderStatus.PROCESANDO);
         return orderRepository.save(order);
     }
-
-    // ==========================================================
-    // 🚀 AGREGADO: listar TODAS las órdenes (para admin)
-    // ==========================================================
+    // obtener todas las ordenes
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
     }
-
-    // ==========================================================
-    // 🚀 AGREGADO: listar órdenes por cliente
-    // ==========================================================
-    public List<Order> getOrdersByCustomer(Long customerId) {
+    //listaar ordene por cliente
+    public List<Order> getOrdersByCustomerId(Long customerId) {
         return orderRepository.findByCustomerId(customerId);
     }
 }
